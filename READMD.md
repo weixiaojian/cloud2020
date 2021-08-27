@@ -1,0 +1,18 @@
+# SpringBoot与SpringCloud版本选型
+> SpringBoot2.X版和SpringCloud H版  
+> 版本对应关系：https://start.spring.io/actuator/info
+* spring cloud：Hoxton.SR1
+* spring boot：2.2.2.RELEASE
+* spring cloud Alibaba：2.1.0.RELEASE
+* java：JAVA8
+* maven：3.5及以上
+* mysql：5.7及以上
+
+# 关于Cloud各种组件的停更/升级/替换
+* 服务注册中心：Eureka（停用） 》》》   Nacos/Zookeeper/Consul
+* 服务调用：Ribbon（停更）   》》》     LoadBalancer
+* 服务调用：Feign（停用）    》》》     OpenFeign
+* 服务降级：Hystrix（停用）  》》》     Sentienl/Resilience4j
+* 服务网关：zuul（停用）     》》》     Gateway
+* 服务配置：Config（停用）   》》》     Nacos
+* 服务总线：Bus（停用）      》》》     Nacos
