@@ -1,6 +1,6 @@
 package io.imwj.springcloud.service;
 
-import io.imwj.springcloud.entities.Payment;
+import entities.Payment;
 import org.apache.ibatis.annotations.Param;
 
 /**

@@ -1,6 +1,6 @@
 package io.imwj.springcloud.dao;
 
-import io.imwj.springcloud.entities.Payment;
+import entities.Payment;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
