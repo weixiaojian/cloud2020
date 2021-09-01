@@ -1,7 +1,7 @@
 package io.imwj.springcloud.controller;
 
-import entities.CommonResult;
-import entities.Payment;
+import io.imwj.springcloud.entities.CommonResult;
+import io.imwj.springcloud.entities.Payment;
 import io.imwj.springcloud.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

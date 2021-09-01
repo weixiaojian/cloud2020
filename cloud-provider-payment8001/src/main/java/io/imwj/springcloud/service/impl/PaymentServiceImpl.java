@@ -1,6 +1,6 @@
 package io.imwj.springcloud.service.impl;
 
-import entities.Payment;
+import io.imwj.springcloud.entities.Payment;
 import io.imwj.springcloud.dao.PaymentDao;
 import io.imwj.springcloud.service.PaymentService;
 import org.springframework.stereotype.Service;

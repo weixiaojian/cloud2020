@@ -1,4 +1,4 @@
-package entities;
+package io.imwj.springcloud.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
