@@ -2,18 +2,16 @@ package io.imwj.springcloud;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
 /**
  * @author langao_q
- * @since 2021-08-27 16:26
+ * @since 2021-09-01 9:44
  */
-@EnableEurekaClient
+@EnableEurekaServer
 @SpringBootApplication
-public class PaymentMain8001 {
-
+public class EurekaMain7002 {
     public static void main(String[] args) {
-        SpringApplication.run(PaymentMain8001.class, args);
+        SpringApplication.run(EurekaMain7002.class,args);
     }
-
 }

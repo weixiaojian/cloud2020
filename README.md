@@ -17,3 +17,9 @@
 * 服务配置：Config（停用）   》》》     Nacos
 * 服务总线：Bus（停用）      》》》     Nacos
 
+# 端口汇总
+consume-orderr：80
+provider-payment：8001
+eureka-server：7001
+
+# Eureka 
