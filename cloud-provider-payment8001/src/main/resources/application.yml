@@ -16,7 +16,14 @@ eureka:
     register-with-eureka: true
     fetchRegistry: true
     service-url:
-      defaultZone: http://eureka7001.com:7001/eureka/,http://eureka7002.com:7002/eureka/
+      #defaultZone: http://eureka7001.com:7001/eureka/  #单机
+      defaultZone: http://eureka7001.com:7001/eureka/,http://eureka7002.com:7002/eureka/   #集群
+  instance:
+    instance-id: payment8001
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 30  #心跳发发送频率（单位秒）
+    lease-expiration-duration-in-seconds: 90   #设置过期剔除时间（单位秒）
+
 
 mybatis:
   mapperLocations: classpath:mapper/*.xml
