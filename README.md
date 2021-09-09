@@ -23,3 +23,12 @@ provider-payment：8001
 eureka-server：7001
 
 # Eureka 
+
+# Zookeeper
+
+# Consul
+
+# 三个注册中对比
+* CAP：C:Consistency(强一致性)、A:Availability(可用性)、P:Partition tolerance(分区容错)(P是永远要保证的，三选二)
+* Eureka优先保证AP
+* Zookeeper/Consul优先保证CP
