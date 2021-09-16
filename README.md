@@ -52,3 +52,15 @@ cloud-providerconsul-payment8006    consul注册中心下的生产者支付模�
 * CAP：C:Consistency(强一致性)、A:Availability(可用性)、P:Partition tolerance(分区容错)(P是永远要保证的，三选二)
 * Eureka优先保证AP
 * Zookeeper/Consul优先保证CP
+
+# Ribbon
+* 默认的沦陷算法原理
+```
+负载均衡算法: rest接口第几次请求数%服务器集群总数量=实际调用服务器位置下标，每次服务重启动后rest接口计数从1开始
+
+假设有两台服务提供者：服务器集群总数量即为2
+当总请求数为1时:1%2=1对应下标位置为1
+当总请求数为2时:2%2=0对应下标位置为0
+当总请求数为3时:3%2=1对应下标位置为1
+```
+* Ribbon传送门：[http://imwj.club/article/123](http://imwj.club/article/123)
