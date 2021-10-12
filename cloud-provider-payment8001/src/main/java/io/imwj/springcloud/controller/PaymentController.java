@@ -43,6 +43,7 @@ public class PaymentController {
     @GetMapping("/payment/getPaymentById/{id}")
     public CommonResult getPaymentById(@PathVariable("id") Long id) {
         Payment payment = paymentService.getPaymentById(id);
+        payment.setProt(serverProt);
         log.info("****{}****查询结果：{}", serverProt, payment);
         if (payment != null) {
             return CommonResult.success(payment);
@@ -62,6 +63,11 @@ public class PaymentController {
             log.info(instance.getServiceId() + "\t" + instance.getHost() + "\t" + instance.getPort() + "\t" + instance.getUri());
         }
         return CommonResult.success(discoveryClient);
+    }
+
+    @GetMapping(value = "/payment/lb")
+    public String getPaymentLB(){
+        return serverProt;
     }
 }
 

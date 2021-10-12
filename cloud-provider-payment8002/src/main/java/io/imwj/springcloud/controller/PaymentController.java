@@ -37,12 +37,18 @@ public class PaymentController {
     @GetMapping("/payment/getPaymentById/{id}")
     public CommonResult getPaymentById(@PathVariable("id") Long id) {
         Payment payment = paymentService.getPaymentById(id);
+        payment.setProt(serverProt);
         log.info("****{}****查询结果：{}", serverProt, payment);
         if(payment != null){
             return CommonResult.success(payment);
         }else {
             return CommonResult.fail("操作失败");
         }
+    }
+
+    @GetMapping(value = "/payment/lb")
+    public String getPaymentLB(){
+        return serverProt;
     }
 
 }
