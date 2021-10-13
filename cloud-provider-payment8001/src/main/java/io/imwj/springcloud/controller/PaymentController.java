@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author langao_q
@@ -27,12 +28,12 @@ public class PaymentController {
     private DiscoveryClient discoveryClient;
 
     @Value("${server.port}")
-    private String serverProt;
+    private String serverPort;
 
     @PostMapping("/payment/create")
     public CommonResult create(@RequestBody Payment payment) {
         int result = paymentService.create(payment);
-        log.info("****{}****查询结果：{}", serverProt, result);
+        log.info("****{}****查询结果：{}", serverPort, result);
         if (result > 0) {
             return CommonResult.success(result);
         } else {
@@ -43,8 +44,8 @@ public class PaymentController {
     @GetMapping("/payment/getPaymentById/{id}")
     public CommonResult getPaymentById(@PathVariable("id") Long id) {
         Payment payment = paymentService.getPaymentById(id);
-        payment.setProt(serverProt);
-        log.info("****{}****查询结果：{}", serverProt, payment);
+        payment.setProt(serverPort);
+        log.info("****{}****查询结果：{}", serverPort, payment);
         if (payment != null) {
             return CommonResult.success(payment);
         } else {
@@ -67,7 +68,13 @@ public class PaymentController {
 
     @GetMapping(value = "/payment/lb")
     public String getPaymentLB(){
-        return serverProt;
+        return serverPort;
+    }
+
+    @GetMapping(value = "/payment/feign/timeout")
+    public String paymentFeignTimeout(){
+        try { TimeUnit.SECONDS.sleep(3); }catch (Exception e) {e.printStackTrace();}
+        return serverPort;
     }
 }
 

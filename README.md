@@ -64,3 +64,41 @@ cloud-providerconsul-payment8006    consul注册中心下的生产者支付模�
 当总请求数为3时:3%2=1对应下标位置为1
 ```
 * Ribbon传送门：[http://imwj.club/article/123](http://imwj.club/article/123)
+
+# OpenFeign
+* Feign传送门：[http://imwj.club/article/124](http://imwj.club/article/124)
+
+* 配置超时时间：默认是1秒  容易报错
+```
+ribbon:
+  ReadTimeout:  5000
+  ConnectTimeout: 5000
+```
+
+* 配置日志输出
+1.增加配置bean
+```
+@Configuration
+public class FeignConfig {
+
+    /**
+     * NONE: 默认的，不显示任何日志
+     * BASIC：仅记录请求方法、URL、响应状态码以及执行时间
+     * HEADERS：除了BASIC中定义的信息以外，还有请求和响应的头信息
+     * FULL： 除了HEADERS中定义的信息之外，还有请求和响应的正文及元数据
+     * @return
+     */
+    @Bean
+    Logger.Level feignLoggerLevel(){
+        return Logger.Level.FULL;
+    }
+}
+}
+```
+2.配置文件中开启日志
+```
+logging:
+  level:
+    com.atguigu.springcloud.service.PaymentFeignService: debug
+```
+
