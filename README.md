@@ -102,3 +102,5 @@ logging:
     com.atguigu.springcloud.service.PaymentFeignService: debug
 ```
 
+# Hystrix
+
