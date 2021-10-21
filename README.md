@@ -54,7 +54,7 @@ cloud-providerconsul-payment8006    consul注册中心下的生产者支付模�
 * Zookeeper/Consul优先保证CP
 
 # Ribbon
-* 默认的沦陷算法原理
+* 默认的轮询算法原理
 ```
 负载均衡算法: rest接口第几次请求数%服务器集群总数量=实际调用服务器位置下标，每次服务重启动后rest接口计数从1开始
 
@@ -67,6 +67,21 @@ cloud-providerconsul-payment8006    consul注册中心下的生产者支付模�
 
 # OpenFeign
 * Feign传送门：[http://imwj.club/article/124](http://imwj.club/article/124)
+
+* OpenFeign：通过@FeignClient注解+接口实现服务调用，controler中直接注入该service然后调用其中的方法即可
+```
+@Component
+@FeignClient(value = "CLOUD-PAYMENT-SERVICE")
+public interface PaymentFeignService {
+
+    @GetMapping(value = "/payment/getPaymentById/{id}")
+    public CommonResult getPaymentById(@PathVariable("id") Long id);
+
+    @GetMapping(value = "/payment/feign/timeout")
+    public String paymentFeignTimeout();
+}
+```
+
 
 * 配置超时时间：默认是1秒  容易报错
 ```
@@ -103,6 +118,12 @@ logging:
 ```
 
 # Hystrix
+* Hystrix传送门：[http://imwj.club/article/125](http://imwj.club/article/125)
 * 服务降级
 * 服务熔断
 * 服务限流
+
+# Gateway
+* Route路由：路由是网关最基础的部分，路由信息有一个ID、一个目的URL、一组断言和一组Filter组成。如果断言路由为真，则说明请求的URL和配置匹配  
+* Predicate断言：参考的是Java8中的断言函数。Spring Cloud Gateway中的断言函数输入类型是Spring5.0框架中的ServerWebExchange。Spring Cloud Gateway中的断言函数允许开发者去定义匹配来自于http request中的任何信息，比如请求头和参数等。如果请求与断言相匹配则进行该路由。  
+* Filter过滤：一个标准的Spring webFilter。Spring cloud gateway中的filter分为两种类型的Filter，分别是Gateway Filter(路由过滤)和Global Filter(全局过滤)。过滤器Filter将会对请求和响应进行修改处理  
