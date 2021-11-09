@@ -18,6 +18,7 @@ public class MyLB implements LoadBalancer {
     /**
      * 获取当前请求次数
      * compareAndSet(期望值，修改值)
+     *
      * @return
      */
     private final int getAndIncrement() {
@@ -27,7 +28,7 @@ public class MyLB implements LoadBalancer {
             current = this.atomicInteger.get();
             next = current >= 2147483647 ? 0 : current + 1;
         } while (!this.atomicInteger.compareAndSet(current, next));
-        System.out.println("*******第"+current+"次访问，次数next: "+next);
+        System.out.println("*******第" + current + "次访问，次数next: " + next);
         return next;
     }
 

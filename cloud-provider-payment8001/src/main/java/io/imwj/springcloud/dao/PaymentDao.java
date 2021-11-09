@@ -13,6 +13,7 @@ public interface PaymentDao {
 
     /**
      * 添加数据
+     *
      * @param payment
      * @return
      */
@@ -20,9 +21,10 @@ public interface PaymentDao {
 
     /**
      * 根据id查询数据
+     *
      * @param id
      * @return
      */
-    public Payment getPaymentById(@Param("id")Long id);
+    public Payment getPaymentById(@Param("id") Long id);
 
 }

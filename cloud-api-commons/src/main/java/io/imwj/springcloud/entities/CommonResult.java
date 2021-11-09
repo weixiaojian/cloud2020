@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommonResult <T>{
+public class CommonResult<T> {
 
     /**
      * 成功
@@ -28,12 +28,14 @@ public class CommonResult <T>{
 
 
     public static CommonResult success() {
-        return new CommonResult(SUCCESS_CODE,"操作成功！",true);
+        return new CommonResult(SUCCESS_CODE, "操作成功！", true);
     }
+
     public static CommonResult success(Object data) {
-        return new CommonResult(SUCCESS_CODE,"操作成功！",data);
+        return new CommonResult(SUCCESS_CODE, "操作成功！", data);
     }
+
     public static CommonResult fail(String message) {
-        return new CommonResult(FAIL_CODE,message,"");
+        return new CommonResult(FAIL_CODE, message, "");
     }
 }

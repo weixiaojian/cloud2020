@@ -46,6 +46,7 @@ public class PaymentController {
 
     /**
      * 全局服务兜底返回
+     *
      * @return
      */
     public String payment_Global_FallbackMethod() {

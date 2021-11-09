@@ -34,32 +34,33 @@ public class OrderController {
     private DiscoveryClient discoveryClient;
 
     @PostMapping("/consumer/payment/create")
-    public CommonResult<Payment> create(@RequestBody Payment payment){
-        return restTemplate.postForObject(PAYMENT_URL+"/payment/create", payment, CommonResult.class);
+    public CommonResult<Payment> create(@RequestBody Payment payment) {
+        return restTemplate.postForObject(PAYMENT_URL + "/payment/create", payment, CommonResult.class);
     }
 
     @GetMapping("/consumer/payment/get/{id}")
-    public CommonResult<Payment> getPayment(@PathVariable("id") Long id){
-        return restTemplate.getForObject(PAYMENT_URL+"/payment/getPaymentById/"+id,CommonResult.class);
+    public CommonResult<Payment> getPayment(@PathVariable("id") Long id) {
+        return restTemplate.getForObject(PAYMENT_URL + "/payment/getPaymentById/" + id, CommonResult.class);
     }
 
     @GetMapping(value = "/consumer/payment/lb")
-    public String getPaymentLB(){
-        return restTemplate.getForObject(PAYMENT_URL+"/payment/lb",String.class);
+    public String getPaymentLB() {
+        return restTemplate.getForObject(PAYMENT_URL + "/payment/lb", String.class);
     }
 
     /**
      * 使用自己实现的轮询算法
+     *
      * @return
      */
     @GetMapping(value = "/consumer/payment/lbTo")
-    public String getPaymentLBTo(){
+    public String getPaymentLBTo() {
         List<ServiceInstance> instances = discoveryClient.getInstances("CLOUD-PAYMENT-SERVICE");
-        if (instances == null || instances.size() <= 0){
+        if (instances == null || instances.size() <= 0) {
             return null;
         }
         ServiceInstance serviceInstance = loadBalancer.instances(instances);
         URI uri = serviceInstance.getUri();
-        return restTemplate.getForObject(uri+"/payment/lb",String.class);
+        return restTemplate.getForObject(uri + "/payment/lb", String.class);
     }
 }

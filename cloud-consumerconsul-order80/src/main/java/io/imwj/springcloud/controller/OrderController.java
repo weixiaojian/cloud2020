@@ -21,8 +21,8 @@ public class OrderController {
     private RestTemplate restTemplate;
 
     @GetMapping("/consumer/payment/consul")
-    public String payment (){
-        String result = restTemplate.getForObject(INVOME_URL+"/payment/consul",String.class);
+    public String payment() {
+        String result = restTemplate.getForObject(INVOME_URL + "/payment/consul", String.class);
         return result;
     }
 

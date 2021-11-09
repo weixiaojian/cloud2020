@@ -20,8 +20,8 @@ public class OrderZKController {
     private RestTemplate restTemplate;
 
     @GetMapping("/consumer/payment/zk")
-    public CommonResult payment (){
-        String result = restTemplate.getForObject(INVOME_URL+"/payment/zk",String.class);
+    public CommonResult payment() {
+        String result = restTemplate.getForObject(INVOME_URL + "/payment/zk", String.class);
         return CommonResult.success(result);
     }
 }

@@ -13,6 +13,7 @@ public interface LoadBalancer {
     /**
      * 得到当前需要提供服务的服务对象
      * 收集服务器总共有多少台能够提供服务的机器，并放到list里面
+     *
      * @param serviceInstances
      * @return
      */

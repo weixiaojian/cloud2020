@@ -11,8 +11,7 @@ import org.springframework.context.annotation.Bean;
 public class MySelfRule {
 
     @Bean
-    public IRule myRule()
-    {
+    public IRule myRule() {
         return new RoundRobinRule();//轮询算法
         //return new RandomRule();//随机算法
     }
