@@ -128,7 +128,7 @@ logging:
 * Predicate断言：参考的是Java8中的断言函数。Spring Cloud Gateway中的断言函数输入类型是Spring5.0框架中的ServerWebExchange。Spring Cloud Gateway中的断言函数允许开发者去定义匹配来自于http request中的任何信息，比如请求头和参数等。如果请求与断言相匹配则进行该路由。  
 * Filter过滤：一个标准的Spring webFilter。Spring cloud gateway中的filter分为两种类型的Filter，分别是Gateway Filter(路由过滤)和Global Filter(全局过滤)。过滤器Filter将会对请求和响应进行修改处理  
 
-* yml配置实现路由匹配
+## yml配置实现路由匹配
 ```
 server:
   port: 9527
@@ -167,4 +167,59 @@ public class GateWayConfig {
                 .build();
     }
 }
+```
+
+## Route Predicate Factorie（路由谓词）
+```
+1.After=2021-11-18T14:45:00.102+08:00[Asia/Shanghai]    #在此时间后这个断言生效
+
+2.Before=2021-11-18T14:45:00.102+08:00[Asia/Shanghai]   #在此时间前这个断言有效
+
+3.Between=2017-01-20T17:42:47.789-07:00[America/Denver], 2017-01-21T17:42:47.789-07:00[America/Denver]  #在此时间范围内这个断言有效
+
+4.Cookie=username,zs    #请求头cookie中 要求username=zs
+
+5.Header=X-Request-Id, \d+      #请求头Header中 要求有请求参数 X-Request-Id,且是数字
+
+...
+```
+
+## Gatway Filters
+> 分为单一过滤器、全局过滤器(主要)
+
+* GlobalFilter
+主要功能：全局日志记录、统一网关鉴权等等
+
+* 例子
+```
+@Component
+@Slf4j
+public class MyLogGateWayFilter implements GlobalFilter, Ordered {
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        ServerHttpRequest request = exchange.getRequest();
+        //日志记录
+        MultiValueMap<String, String> queryParams = request.getQueryParams();
+        log.info("===请求参数["+new Date()+"]：" + queryParams.toString());
+        //用户鉴权
+        String username = request.getQueryParams().getFirst("username");
+        if(StringUtils.isEmpty(username)){
+            log.info("===用户名为Null 非法用户,(┬＿┬)");
+            exchange.getResponse().setStatusCode(HttpStatus.NOT_ACCEPTABLE);//给人家一个回应
+            return exchange.getResponse().setComplete();
+        }
+        //放行
+        return chain.filter(exchange);
+    }
+
+    /**
+     * 顺序 0表示第一个过滤器
+     * @return
+     */
+    @Override
+    public int getOrder() {
+        return 0;
+    }
+}
+
 ```

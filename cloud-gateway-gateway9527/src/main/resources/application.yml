@@ -7,17 +7,21 @@ spring:
     gateway:
       discovery:
         locator:
-          enabled: false  #开启从注册中心动态创建路由的功能，利用微服务名进行路由
+          enabled: true  #开启从注册中心动态创建路由的功能，利用微服务名进行路由
       routes:
         - id: payment_routh #路由的ID，没有固定规则但要求唯一，建议配合服务名
           uri: lb://CLOUD-PAYMENT-SERVICE
           predicates:
             - Path=/payment/getPaymentById/**   #断言,路径相匹配的进行路由
+            - Before=2021-11-18T14:45:00.102+08:00[Asia/Shanghai]   #在此时间前这个断言有效
 
         - id: payment_routh2
           uri: lb://CLOUD-PAYMENT-SERVICE
           predicates:
             - Path=/payment/lb/**   #断言,路径相匹配的进行路由
+            - After=2021-11-18T14:45:00.102+08:00[Asia/Shanghai]    #在此时间后这个断言生效
+            - Cookie=username,zs    #请求头cookie中 要求username=zs
+            - Header=X-Request-Id, \d+
 eureka:
   instance:
     hostname: cloud-gateway-service
