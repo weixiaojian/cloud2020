@@ -19,6 +19,7 @@ public class ConfigClientController {
 
     @GetMapping("/configInfo")
     public String getConfigInfo(){
+
         return configInfo;
     }
 
