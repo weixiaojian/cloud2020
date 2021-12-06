@@ -252,3 +252,26 @@ eureka:
       defaultZone:  http://localhost:7001/eureka
 ```
 * 3.访问http://127.0.0.1:3344/master/config-dev.yml即可读取到配置文件信息
+
+
+## 实现一次刷新配置中心  其余项目的配置生效
+* 1.新建项目cloud-config-client-3355、cloud-config-client-3366  
+
+* 2.在两个项目的pom中增加依赖和添加rabbitmq配置  
+```
+        <!--bus-amqp-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bus-amqp</artifactId>
+        </dependency>
+```
+
+* 3.修改github上的配置后 手动刷新3344配置中心  
+```
+curl -X POST "http://localhost:3344/actuator/bus-refresh"
+```
+
+* 刷新指定服务3355
+```
+curl -X POST "http://localhost:3344/actuator/bus-refresh/config-client:3355"
+```
