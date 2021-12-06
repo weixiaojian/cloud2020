@@ -221,5 +221,34 @@ public class MyLogGateWayFilter implements GlobalFilter, Ordered {
         return 0;
     }
 }
-
 ```
+
+# springcloud config
+* springcloud config传送门：[http://imwj.club/article/128](http://imwj.club/article/128)
+
+## 例子
+* 1.新建一个springcloud-config项目存放配置信息
+```
+https://github.com/weixiaojian/cloud2020/tree/master/springcloud-config
+```
+* 2.新建cloud-config-center-3344项目做配置中心，yml如下
+```
+server:
+  port: 3344
+spring:
+  application:
+    name: cloud-config-center
+  cloud:
+    config:
+      server:
+        git:
+          uri: git@github.com:weixiaojian/cloud2020.git
+          search-paths:
+            - springcloud-config
+      label: master
+eureka:
+  client:
+    service-url:
+      defaultZone:  http://localhost:7001/eureka
+```
+* 3.访问http://127.0.0.1:3344/master/config-dev.yml即可读取到配置文件信息
