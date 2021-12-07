@@ -405,3 +405,33 @@ public class ReceiveMessageListenerController {
 
 ## 重复消费和持久化
 * 配置了group分组名称即可
+
+
+# Spring Cloud Sleuth
+> 分布式请求的链路追踪
+ 
+* 1.下载jar包并启动：https://search.maven.org/remote_content?g=io.zipkin.java&a=zipkin-server&v=LATEST&c=exec
+```
+java -jar zipkin-server-2.12.9-exec.jar
+```
+* 2.访问：http://127.0.0.1:9411/zipkin
+
+* 3.在项目中引入依赖和配置yml
+```
+<!--包含了sleuth+zipkin-->
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-zipkin</artifactId>
+</dependency>
+        
+        
+spring:
+  application:
+    name: cloud-payment-service
+  zipkin:
+    base-url: http://localhost:9411
+  sleuth:
+    sampler:
+      #采样率值介于 0 到 1 之间，1 则表示全部采集
+      probability: 1
+```
