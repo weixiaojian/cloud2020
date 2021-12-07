@@ -275,3 +275,133 @@ curl -X POST "http://localhost:3344/actuator/bus-refresh"
 ```
 curl -X POST "http://localhost:3344/actuator/bus-refresh/config-client:3355"
 ```
+
+# Spring Cloud Stream
+> 屏蔽底层消息中间件的差异（rabbitmq、kafka），统一消息的编程模型；  
+> 注意：目前仅支持rabbitmq、kafka  
+
+## 常用注解
+| 组成        | 说明    | 
+| --------   | -----  | 
+| Middleware        | 中间件，目前只支持RabbitMQ和Kafka      | 
+| Binder        | Binder是应用于消息中间件之间的封装，目前实行了Kafka和RabbitMQ的Binder，通过Binder可以很方便的连接中间件，可以动态的改变消息类型（对应于Kafka的topic，RabbitMQ的exchange），这些都可以通过配置文件来实现      | 
+| @Input        | 注解标识输入通道，通过该输入通道接收到的消息进入应用程序      | 
+| @Output        | 注解标识输出通道，发布的消息将通过该通道离开应用程      | 
+| @StreamListener        | 监听队列，用于消费者的队列的消息接收      | 
+| @EnableBinding        | 	指信道channel和exchange绑定在一起      | 
+
+## 生产者cloud-stream-rabbitmq-provider8801
+* 1.yml配置
+```
+server:
+  port: 8801
+
+spring:
+  application:
+    name: cloud-stream-provider
+  cloud:
+    stream:
+      binders: # 在此处配置要绑定的rabbitmq的服务信息；
+        defaultRabbit: # 表示定义的名称，用于于binding整合
+          type: rabbit # 消息组件类型
+          environment: # 设置rabbitmq的相关的环境配置
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
+                username: guest
+                password: guest
+      bindings: # 服务的整合处理
+        output: # 这个名字是一个通道的名称
+          destination: studyExchange # 表示要使用的Exchange名称定义
+          content-type: application/json # 设置消息类型，本次为json，文本则设置“text/plain”
+          binder: defaultRabbit  # 设置要绑定的消息服务的具体设置
+
+eureka:
+  client: # 客户端进行Eureka注册的配置
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 2 # 设置心跳的时间间隔（默认是30秒）
+    lease-expiration-duration-in-seconds: 5 # 如果现在超过了5秒的间隔（默认是90秒）
+    instance-id: send-8801.com  # 在信息列表时显示主机名称
+    prefer-ip-address: true     # 访问的路径变为IP地址
+```
+
+* 2.发送消息实现类
+```
+@EnableBinding(Source.class) //标识消息的推送管道
+public class IMessageServiceImpl implements IMessageService {
+
+    @Resource
+    private MessageChannel output;
+
+    @Override
+    public String send() {
+        String uuid = UUID.randomUUID().toString();
+        output.send(MessageBuilder.withPayload(uuid).build());
+        System.out.println("===========UUID：" + uuid);
+        return uuid;
+    }
+}
+```
+
+## 消费者cloud-stream-rabbitmq-consumer8802、cloud-stream-rabbitmq-consumer8803
+* 1.yml配置，注意：一定要配置group分组名称，两个消费者在相同分组时同一条消息只会被一个消费 如果不在一个消费者组则两个消费者都会消费到，且配置了消费者组之后生产者宕机重启也数据也不会丢失
+```
+server:
+  port: 8802
+
+spring:
+  application:
+    name: cloud-stream-consumer
+  cloud:
+    stream:
+      binders: # 在此处配置要绑定的rabbitmq的服务信息；
+        defaultRabbit: # 表示定义的名称，用于于binding整合
+          type: rabbit # 消息组件类型
+          environment: # 设置rabbitmq的相关的环境配置
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
+                username: guest
+                password: guest
+      bindings: # 服务的整合处理
+        input: # 这个名字是一个通道的名称
+          destination: studyExchange # 表示要使用的Exchange名称定义
+          content-type: application/json # 设置消息类型，本次为对象json，如果是文本则设置“text/plain”
+          binder: defaultRabbit # 设置要绑定的消息服务的具体设置
+          group: GROUP-ALL
+
+
+
+eureka:
+  client: # 客户端进行Eureka注册的配置
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 2 # 设置心跳的时间间隔（默认是30秒）
+    lease-expiration-duration-in-seconds: 5 # 如果现在超过了5秒的间隔（默认是90秒）
+    instance-id: receive-8802.com  # 在信息列表时显示主机名称
+    prefer-ip-address: true     # 访问的路径变为IP地址
+```
+* 2.接收消息实体
+```
+@Component
+@EnableBinding(Sink.class)//标识消息的接收管道
+public class ReceiveMessageListenerController {
+
+    @Value("${server.port}")
+    private String serverPort;
+
+    @StreamListener(Sink.INPUT)
+    public void input(Message<String> msgStr){
+        System.out.println("===原始报文：" + msgStr);
+        System.out.println("===serverPort："+ serverPort +" ===消费者接收到数据===" + msgStr.getPayload());
+    }
+}
+```
+
+## 重复消费和持久化
+* 配置了group分组名称即可
