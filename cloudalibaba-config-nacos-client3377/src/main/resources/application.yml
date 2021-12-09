@@ -1,0 +1,4 @@
+spring:
+  profiles:
+    #active: prod # 表示开发环境
+    active: dev # 测试group用
