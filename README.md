@@ -612,3 +612,59 @@ ${spring.application.name}-${spring.profile.active}.${spring.cloud.nacos.config.
 ```
 
 * 6.nacos还可以配置namespace、group等等来进行配置隔离：namespace > group > DataId
+
+## nacos集群配置
+> linux服务器下配置1个nginx + 3个nacos
+* 1.nacos-3333配置conf/cluster.conf
+```
+192.168.31.129:3333
+192.168.31.129:4444
+192.168.31.129:5555
+```
+
+* 2.nacos-3333修改配置conf/application.properties
+```
+server.port=3333
+spring.datasource.platform=mysql
+db.url.0=jdbc:mysql://192.168.31.129:3306/nacos_config?characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=UTC
+db.user.0=root
+db.password.0=123123
+```
+
+* 3.nacos-4444、.nacos-5555同理修改以上两个配置cluster.conf和application.properties
+```
+server.port=4444
+spring.datasource.platform=mysql
+db.url.0=jdbc:mysql://192.168.31.129:3306/nacos_config?characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=UTC
+db.user.0=root
+db.password.0=123123
+
+server.port=5555
+spring.datasource.platform=mysql
+db.url.0=jdbc:mysql://192.168.31.129:3306/nacos_config?characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=UTC
+db.user.0=root
+db.password.0=123123
+```
+
+* 4.nginx配置
+```
+    upstream cluster {
+        #weigth参数表示权值，权值越高被分配到的几率越大
+        server 127.0.0.1:3333 weight=1;
+        server 127.0.0.1:4444 weight=1;
+		server 127.0.0.1:5555 weight=1;
+    }
+    server {
+        listen       8989;
+        server_name  localhost;
+        access_log off;              
+        location / {         
+               proxy_pass http://cluster;
+        }
+    }
+```
+
+* 5.集群模式启动三个nacos`sh startup.sh`，启动nginx 浏览器中访问
+```
+http://192.168.31.129:1111/nacos
+```
