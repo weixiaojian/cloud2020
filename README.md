@@ -668,3 +668,6 @@ db.password.0=123123
 ```
 http://192.168.31.129:1111/nacos
 ```
+
+# Sentinel
+> 官网：[https://sentinelguard.io/zh-cn/](https://sentinelguard.io/zh-cn/)  
