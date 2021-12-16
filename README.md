@@ -801,3 +801,5 @@ strategy：流控模式 0直接 1关联 2链路
 controlBehavior：流控效果 0快速失败 1Warm Up 2排队等待
 clusterMode：是否集群
 ```
+
+# Seata分布式事务处理
