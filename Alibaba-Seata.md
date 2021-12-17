@@ -4,10 +4,10 @@
 * 官网：[https://seata.io/zh-cn/](https://seata.io/zh-cn/)
 
 ## 官网术语
-* ID（Transaction ID XID） + 三组件（TC事务协调者、TM事务管理器、RM资源管理器）
-* TC事务协调者：维护全局和分支事务的状态，驱动全局事务提交或回滚。
-* TM事务管理器：定义全局事务的范围：开始全局事务、提交或回滚全局事务。
-* RM资源管理器：管理分支事务处理的资源，与TC交谈以注册分支事务和报告分支事务的状态，并驱动分支事务提交或回滚。
+* ID（Transaction ID XID） + 三组件（TC事务协调者、TM事务管理器、RM资源管理器）     
+* TC事务协调者：维护全局和分支事务的状态，驱动全局事务提交或回滚。                                             --seata服务器
+* TM事务管理器：定义全局事务的范围：开始全局事务、提交或回滚全局事务。                                          --事务发起方
+* RM资源管理器：管理分支事务处理的资源，与TC交谈以注册分支事务和报告分支事务的状态，并驱动分支事务提交或回滚。     --事务参与方
 
 ![image](https://raw.githubusercontent.com/weixiaojian/cloud2020/master/seata-process.png)
 
@@ -105,4 +105,4 @@ seata数据库所需表：
     }
 ```
 
-* 5.在有`@GlobalTransactional`或者没有该注解的情况下调用2001的`/order/create`查看三个数据库中的订单表、库存表、余额表的事务情况
+* 5.在有`@GlobalTransactional`或者没有该注解的情况下调用2001的`/order/create`查看三个数据库中的订单表、库存表、余额表的事务情况，Seata默认是AT 模式
